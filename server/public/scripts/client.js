@@ -5,7 +5,7 @@ $( document ).ready( onReady );
 function onReady() {
     console.log('DOM ready');
 // add on click
-$('#addJokeButton').on('click',sendToServer);
+$('#addJokeButton').on('click',sendToServer); 
 
 getJokeList(); 
 }
@@ -26,10 +26,9 @@ function sendToServer(event){
     $.ajax({
         method: 'POST',
         url:'/jokeObject',
-        
     }).then(
             function(response){
-            getJokeList()
+            getJokeList() // put in the jokes
     }
     ).catch(
         function(error){
@@ -38,15 +37,15 @@ function sendToServer(event){
         }
     )
 
-} // end function
+} // end function send to server    
 
-function getJokeList(){ // getEquationsAndAddToPage
+function getJokeList(){ 
     $.ajax({
         method: 'GET',
         url: '/jokeObject'
     }).then(
         function(response){
-
+                
 
 
 
@@ -69,13 +68,3 @@ console.log('Jokes',jokeObject);
 // function sendJokeList(event){
 //     event.preventDefault();
 
-//     whoseJoke
-
-
-// }
-//ajax POST
-
-//app.get
-
-
-//app.post

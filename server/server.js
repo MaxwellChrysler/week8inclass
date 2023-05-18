@@ -1,10 +1,11 @@
 const express = require( 'express' );
 const app = express();
-const bodyParser = require( 'body-parser' );
+
 const PORT = 5000;
 
 // use bodyParser.urlencoded throughout the app with this:
 app.use(bodyParser.urlencoded({ extended: true }));
+const bodyParser = require( 'body-parser' );
 
 let jokes = [ //jokes array no need to do anything
   {
