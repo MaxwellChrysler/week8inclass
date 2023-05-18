@@ -3,13 +3,28 @@ console.log('client.js sourced');
 $( document ).ready( onReady );
 
 function onReady() {
-    console.log('DOM ready');
+
 // add on click
-$('#addJokeButton').on('click',sendToServer); 
+$('#addJokeButton').on('click', sendToServer); 
 
 getJokeList(); 
 }
 
+
+
+function renderToDom(array){ // need to put something in the ()
+console.log('Render to dom is working');
+$('#outputDiv').empty(); // wipe what is currently on the dom to replace it with current info
+for(let object of array){
+    // match the name of what in the function
+$('#outputDiv').append(` 
+${object.whoseJoke}'s joke. 
+${object.jokeQuestion} is the question.
+${object.punchLine} is the punchline
+ahahaha so funny
+
+`)}
+}
 
 
 function sendToServer(event){
@@ -26,14 +41,21 @@ function sendToServer(event){
     $.ajax({
         method: 'POST',
         url:'/jokeObject',
+        data: jokeObject // data so I can send it out
+
     }).then(
             function(response){
-            getJokeList() // put in the jokes
+            getJokeList() // display the updated array
+            console.log('Post joke is working');
+            $("whoseJokeIn").val(''); // cleared data
+            $("questionIn").val('');
+            $("punchlineIn").val('');
+
     }
     ).catch(
         function(error){
-            console.log('POST /jokeObject call failed');
-            console.log('error',error)
+            console.log('POST /jokeObject call failed', error);
+       
         }
     )
 
@@ -42,25 +64,19 @@ function sendToServer(event){
 function getJokeList(){ 
     $.ajax({
         method: 'GET',
-        url: '/jokeObject'
+        url: '/jokeObject',
+
     }).then(
         function(response){
-                
+            console.log('getJokesList is working');
+            renderToDom(response);
 
-
-
-        }
-
-        //
-//ajax GET 
-// in the array and the append
-
-)
-
-
+        }).catch(function(error){
+            console.log('Errors in getJokesList');
+        })
 
 } // end of getJokeList
-console.log('Jokes',jokeObject);
+
 
 
 
