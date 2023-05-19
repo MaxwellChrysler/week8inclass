@@ -3,83 +3,94 @@ console.log('client.js sourced');
 $( document ).ready( onReady );
 
 function onReady() {
-
+    console.log('DOM ready');
 // add on click
-$('#addJokeButton').on('click', sendToServer); 
+$('#addJokeButton').on('click',sendToServer); 
 
 getJokeList(); 
 }
 
+function renderToDom(jokeObject){
+  $('#outputDiv').empty();
+
+  for(let joke of jokeObject){
+    $('#outputDiv').append(`
+    ${joke.whoseJoke} <br>
+    ${joke.jokeQuestion}<br>
+    ${joke.punchLine}<br>
+    
+    `)
 
 
-function renderToDom(array){ // need to put something in the ()
-console.log('Render to dom is working');
-$('#outputDiv').empty(); // wipe what is currently on the dom to replace it with current info
-for(let object of array){
-    // match the name of what in the function
-$('#outputDiv').append(` 
-${object.whoseJoke}'s joke. 
-${object.jokeQuestion} is the question.
-${object.punchLine} is the punchline
-ahahaha so funny
+  }
 
-`)}
 }
 
 
-function sendToServer(event){
-    event.preventDefault;
-
-    let jokeObject = { // put together the jokes in the format
-
-    whoseJoke: $("whoseJokeIn").val(),
-    jokeQuestion:$("questionIn").val() ,
-    punchLine:$("punchlineIn").val()
-    }; // end inputing object
-    //ajax post
-
-    $.ajax({
-        method: 'POST',
-        url:'/jokeObject',
-        data: jokeObject // data so I can send it out
-
-    }).then(
-            function(response){
-            getJokeList() // display the updated array
-            console.log('Post joke is working');
-            $("whoseJokeIn").val(''); // cleared data
-            $("questionIn").val('');
-            $("punchlineIn").val('');
-
-    }
-    ).catch(
-        function(error){
-            console.log('POST /jokeObject call failed', error);
-       
-        }
-    )
-
-} // end function send to server    
+  
 
 function getJokeList(){ 
+ 
+  console.log('GET jokes list does this work?')
+  // changed format to have get first, makes more sense because thats the first thing we want to have happen
     $.ajax({
         method: 'GET',
-        url: '/jokeObject',
+        url: '/jokeObject'
 
-    }).then(
-        function(response){
-            console.log('getJokesList is working');
-            renderToDom(response);
+    }).then(function(response){
+      console.log('Get worked',response);
+      renderToDom(response);
 
-        }).catch(function(error){
-            console.log('Errors in getJokesList');
-        })
+    }).catch(function(error){
+      console.log('failed to GET')
+      console.log('failed to GET', error)
+    })
 
+        //
+//ajax GET 
+// in the array and the append
 } // end of getJokeList
 
 
 
+function sendToServer(event){
+  console.log('POST does this work')
+  event.preventDefault;
 
+  // put together the jokes in the format
+
+  let whoseJoke = $("#whoseJokeIn").val();
+  let jokeQuestion = $("#questionIn").val();
+  let punchLine = $("#punchlineIn").val();
+  // end inputing object
+  //ajax post
+
+
+  $.ajax({
+      method: 'POST',
+      url:'/jokeObject',
+      data: {
+
+        whoseJoke,
+        jokeQuestion,
+        punchLine,
+      }
+  }).then(
+          function(response){
+        $("#whoseJokeIn").val(''); // clear after use
+        $("#questionIn").val('');
+        $("#punchlineIn").val('');
+          
+          getJokeList() // put in the jokes
+  }
+  ).catch(
+      function(error){
+          console.log('POST /jokeObject call failed');
+          console.log('error',error)
+      }
+  )
+
+} // end function send to server  
 
 // function sendJokeList(event){
 //     event.preventDefault();

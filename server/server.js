@@ -1,11 +1,12 @@
 const express = require( 'express' );
 const app = express();
+const bodyParser = require( 'body-parser' );
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 const PORT = 5000;
-
 // use bodyParser.urlencoded throughout the app with this:
-app.use(bodyParser.urlencoded({ extended: true }));
-const bodyParser = require( 'body-parser' );
 
 // serve back static files
 app.use(express.static('server/public'));
@@ -46,8 +47,24 @@ app.get('/jokeObject', (req, res) => { //
   res.send(jokes); // go get the array 
 })
 
-app.post('/jokeObject'),(req, res) => {
-  // let whoseJoke = (req.body.whoseJoke);
+app.post('/jokeObject',(req, res) => {
+ 
+    console.log('is this thing working');
+
+    jokes.push(req.body); // put the new jokes into the joke array
+
+    res.sendStatus(201); // completed 
+})
+
+
+
+
+app.listen(PORT, () => {
+  console.log('server running on: ', PORT);
+}); // end spin up server
+
+
+ // let whoseJoke = (req.body.whoseJoke);
   // let jokeQuestion = (req.body.jokeQuestion);
   // let punchLine = (req.body.punchLine);
 
@@ -57,15 +74,3 @@ app.post('/jokeObject'),(req, res) => {
   //     punchLine: punchLine
 
   // }
-
-    jokes.push(req.body); // put the new jokes into the joke array
-
-    res.sendStatus(201); // completed 
-}
-
-
-
-
-app.listen(PORT, () => {
-  console.log('server running on: ', PORT);
-}); // end spin up server
