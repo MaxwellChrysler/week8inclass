@@ -18,7 +18,7 @@ function renderToDom(jokeObject){
     ${joke.whoseJoke} <br>
     ${joke.jokeQuestion}<br>
     ${joke.punchLine}<br>
-    
+    ahahaha 
     `)
 
 
